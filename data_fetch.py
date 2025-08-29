@@ -3,7 +3,7 @@ import pandas as pd
 from datetime import datetime
 
 
-API_KEY = '26d4fc03c2bf406398d5e4a16e10442c'
+API_KEY = 'xxx'      #replace with your API key(news API)
 def fetch_finance_news():
     url = f'https://newsapi.org/v2/everything?q=finance&language=en&sortBy=publishedAt&apiKey={API_KEY}'
     response = requests.get(url)
@@ -22,4 +22,5 @@ def fetch_finance_news():
 
 
 if __name__ == '__main__':
+
     fetch_finance_news()
