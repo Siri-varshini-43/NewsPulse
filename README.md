@@ -27,7 +27,7 @@ The dashboard provides visual insights such as word clouds, sentiment distributi
 ---
 
 ## 🛠️ Tech Stack
-- **Frontend & Dashboard:** [Streamlit](https://streamlit.io/)  
+- **Frontend & Dashboard:** Streamlit, Python, HTML, CSS, JS.  
 - **Data Handling:** Pandas  
 - **Visualization:** Matplotlib, WordCloud  
 - **NLP Models:**  
