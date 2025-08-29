@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Sign-up</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .message-box {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 1rem;
+            border-radius: 0.5rem;
+            color: white;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s ease-in-out;
+            text-align: center;
+        }
+        .message-box.show {
+            opacity: 1;
+        }
+    </style>
+</head>
+<body class="bg-blue-50 flex items-center justify-center min-h-screen">
+
+    <!-- Main Container -->
+    <div class="bg-white p-8 rounded-xl shadow-2xl w-full max-w-md mx-4">
+
+        <!-- Message Box for Alerts -->
+        <div id="message-box" class="message-box"></div>
+
+        <!-- Header -->
+        <h1 id="form-title" class="text-3xl font-bold text-center text-blue-800 mb-6">Sign In</h1>
+
+        <!-- Sign In Form -->
+        <form id="signInForm" class="space-y-4">
+            <div>
+                <label for="signInEmail" class="block text-sm font-medium text-gray-700">Email Address</label>
+                <input type="email" id="signInEmail" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300" placeholder="yourname@example.com" required>
+            </div>
+            <div>
+                <label for="signInPassword" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" id="signInPassword" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300" placeholder="Enter your password" required>
+            </div>
+            <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 shadow-md">Sign In</button>
+        </form>
+
+        <!-- Create Account Form (initially hidden) -->
+        <form id="createAccountForm" class="space-y-4 hidden">
+            <div>
+                <label for="createEmail" class="block text-sm font-medium text-gray-700">Email Address</label>
+                <input type="email" id="createEmail" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300" placeholder="yourname@example.com" required>
+            </div>
+            <div>
+                <label for="createPassword" class="block text-sm font-medium text-gray-700">Password</label>
+                <input type="password" id="createPassword" class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 transition duration-300" placeholder="Choose a strong password" required>
+            </div>
+            <button type="submit" class="w-full bg-blue-600 text-white py-2 px-4 rounded-lg font-semibold hover:bg-blue-700 transition duration-300 shadow-md">Create Account</button>
+        </form>
+
+        <!-- Toggle Switch -->
+        <p class="text-center text-gray-600 mt-6 text-sm">
+            <span id="toggleText">Don't have an account?</span>
+            <a href="#" id="toggleLink" class="text-blue-600 font-semibold hover:text-blue-800 transition duration-300">Create one</a>
+        </p>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const signInForm = document.getElementById('signInForm');
+            const createAccountForm = document.getElementById('createAccountForm');
+            const toggleLink = document.getElementById('toggleLink');
+            const formTitle = document.getElementById('form-title');
+            const toggleText = document.getElementById('toggleText');
+            const messageBox = document.getElementById('message-box');
+
+            // --- Utility Functions ---
+
+            /**
+             * Displays a temporary message box to the user.
+             * @param {string} message - The message to display.
+             * @param {string} type - 'success', 'error', or 'info' to style the box.
+             */
+            const showMessage = (message, type) => {
+                messageBox.textContent = message;
+                messageBox.className = `message-box show ${type === 'success' ? 'bg-green-500' : type === 'error' ? 'bg-red-500' : 'bg-blue-500'}`;
+                setTimeout(() => {
+                    messageBox.className = 'message-box';
+                }, 3000);
+            };
+
+            /**
+             * Switches between the Sign In and Create Account forms.
+             */
+            const toggleForm = () => {
+                const isSignInActive = !signInForm.classList.contains('hidden');
+                
+                if (isSignInActive) {
+                    signInForm.classList.add('hidden');
+                    createAccountForm.classList.remove('hidden');
+                    formTitle.textContent = 'Create Account';
+                    toggleText.textContent = 'Already have an account?';
+                    toggleLink.textContent = 'Sign In';
+                } else {
+                    signInForm.classList.remove('hidden');
+                    createAccountForm.classList.add('hidden');
+                    formTitle.textContent = 'Sign In';
+                    toggleText.textContent = 'Don\'t have an account?';
+                    toggleLink.textContent = 'Create one';
+                }
+            };
+
+            // --- Event Listeners ---
+
+            toggleLink.addEventListener('click', (e) => {
+                e.preventDefault();
+                toggleForm();
+            });
+
+            createAccountForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('createEmail').value.trim();
+                const password = document.getElementById('createPassword').value.trim();
+
+                if (!email || !password) {
+                    showMessage('Email and password are required.', 'error');
+                    return;
+                }
+
+                // Check if the email already exists in localStorage
+                const users = JSON.parse(localStorage.getItem('users')) || {};
+                if (users[email]) {
+                    showMessage('This email is already registered. Please sign in.', 'error');
+                    return;
+                }
+
+                // Store the new user in localStorage
+                users[email] = { password: password };
+                localStorage.setItem('users', JSON.stringify(users));
+
+                showMessage('Account created successfully!', 'success');
+                // Optionally, switch to the sign-in form after successful creation
+                toggleForm();
+            });
+
+            signInForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                const email = document.getElementById('signInEmail').value.trim();
+                const password = document.getElementById('signInPassword').value.trim();
+
+                if (!email || !password) {
+                    showMessage('Email and password are required.', 'error');
+                    return;
+                }
+
+                // Retrieve user data from localStorage
+                const users = JSON.parse(localStorage.getItem('users')) || {};
+                const user = users[email];
+
+                if (user && user.password === password) {
+                    showMessage('Sign in successful! Redirecting...', 'success');
+                    // Redirect the user to the specified page
+                    window.location.href = 'http://localhost:8501';
+                } else {
+                    showMessage('Invalid email or password.', 'error');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
