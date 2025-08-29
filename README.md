@@ -1,6 +1,6 @@
 # 📰 NewsPulse – Global News Trend Analyzer Using AI
 
-NewsPulse is an **AI-powered finance news dashboard** built with **Streamlit**.  
+NewsPulse is an **AI-powered finance news dashboard** built with **Streamlit, python, HTML, CSS, JS**.  
 It classifies financial news into categories (Stock Market, Cryptocurrency, Banking, Economy), analyzes sentiment (Positive, Negative, Neutral), and extracts named entities (People, Organizations, Locations).  
 The dashboard provides visual insights such as word clouds, sentiment distribution, and trending entities to help users quickly understand financial news trends.  
 
@@ -38,17 +38,17 @@ The dashboard provides visual insights such as word clouds, sentiment distributi
 ---
 
 ## 📂 Project Structure
-```bash
-NewsPulse/
-│── finance_news_cleaned.csv        # Raw dataset
-│── finance_news_classified.csv     # Processed dataset with categories, sentiment & entities
-│── finance_news_raw.csv            # Original collected dataset
-│── data_fetch.py                   # Script to fetch news
-│── preprocess.py                   # Script to clean & preprocess data
-│── classify.py                     # Script for classification & preprocessing
-│── dashboard.py                    # Streamlit dashboard
-│── README.md                       # Project documentation
-```
+   ```bash
+   NewsPulse/
+   │── finance_news_cleaned.csv        # Raw dataset
+   │── finance_news_classified.csv     # Processed dataset with categories, sentiment & entities
+   │── finance_news_raw.csv            # Original collected dataset
+   │── data_fetch.py                   # Script to fetch news
+   │── preprocess.py                   # Script to clean & preprocess data
+   │── classify.py                     # Script for classification & preprocessing
+   │── dashboard.py                    # Streamlit dashboard
+   │── README.md                       # Project documentation
+   ```
 
 
 
