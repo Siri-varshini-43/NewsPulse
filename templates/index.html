@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>NewsPulse - Global News Trend Analyzer</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth-compat.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div class="header-left">
+            <h1>📰 NewsPulse</h1>
+        </div>
+
+        <div class="header-right">
+            <div class="header-search">
+            <form action="/search" method="post">
+                <input type="text" name="keyword" placeholder="Search news by keyword..." required>
+                <button type="submit">Search</button>
+            </form>
+            </div>
+
+            <button id="logout" class="logout-btn">Logout</button>
+            </div>
+        </div>
+        </header>
+
+
+    <div class="dashboard-layout">
+        
+        <aside class="sidebar">
+            <h3>Categories</h3>
+            
+            <nav class="sidebar-nav">
+                <a href="/" class="{{ 'active' if not selected_category else '' }}">All News</a>
+                <a href="/category/world" class="{{ 'active' if selected_category == 'world' else '' }}">World</a>
+                <a href="/category/technology" class="{{ 'active' if selected_category == 'technology' else '' }}">Technology</a>
+                <a href="/category/entertainment" class="{{ 'active' if selected_category == 'entertainment' else '' }}">Entertainment</a>
+                <a href="/category/sports" class="{{ 'active' if selected_category == 'sports' else '' }}">Sports</a>
+                <a href="/category/business" class="{{ 'active' if selected_category == 'business' else '' }}">Business</a>
+                <a href="/category/science" class="{{ 'active' if selected_category == 'science' else '' }}">Science</a>
+                <a href="/category/health" class="{{ 'active' if selected_category == 'health' else '' }}">Health</a>
+            </nav>
+            <h3>📈 Dashboard</h3>
+            <div id="sidebar-dashboard-panel" class="sidebar-dashboard-panel">
+                
+                <h2 class="sidebar-panel-title">Live News Analytics Dashboard</h2>
+
+                <div id="dashboard-charts" class="dashboard-charts-sidebar">
+                    
+                    <div class="chart-container-sidebar">
+                        <h4>Sentiment Breakdown</h4>
+                        <canvas id="sentimentChart"></canvas> 
+                    </div>
+                    
+                    <div class="chart-container-sidebar">
+                        <h4>News Source Distribution</h4>
+                        <canvas id="sourceChart"></canvas>
+                    </div>
+                    
+                    <div id="entity-list-container" class="data-list-container-sidebar">
+                        <h4>Top Organizations (Entities)</h4>
+                        <p>Loading entities...</p>
+                        </div>
+
+                </div>
+            </div>
+            
+            </aside>
+
+        <main class="main-content">
+            <section class="news-feed">
+                <div class="news-container">
+                    {% for article in news %}
+                    <div class="news-card">
+                        
+                        {% if article.image %}
+                        <img src="{{ article.image }}" alt="{{ article.title }}">
+                        {% endif %}
+
+                        <h3><a href="{{ article.url }}" target="_blank">{{ article.title }}</a></h3>
+                        
+                        <p>{{ article.description }}</p>
+                        
+                        <div class="card-details">
+                            <span>Source: {{ article.source.name }}</span>
+                            <span>Sentiment: {{ article.sentiment_emoji }} {{ article.sentiment }}</span>
+                        </div>
+
+                        <div class="card-actions" data-article-url="{{ article.url }}">
+                            
+                            <a href="{{ article.url }}" target="_blank" class="action-btn open-article-btn" title="Read the full story">
+                                Open Full News
+                            </a>
+                            
+                            <button class="action-btn chat-about-btn" 
+                                    data-article-title="{{ article.title }}"
+                                    title="Open chat and ask about this article">
+                                Ask the Bot
+                            </button>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% if not news %}
+                        <p>No news articles found. Check your GNews API key or try a different search term.</p>
+                    {% endif %}
+                </div>
+            </section>
+
+        </main>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 NewsPulse. All rights reserved. | Powered by GNews API</p>
+    </footer>
+
+   <!-- Chatbot Icon -->
+<div id="chatbot-widget" title="Ask the NewsBot">🤖</div>
+
+<!-- Chatbot Dialog -->
+<div id="chatbot-dialog" class="chatbot-dialog">
+    <div class="chatbot-header">
+        <span class="chatbot-title">Newspulse Guide 🧠</span>
+        <button id="chatbot-close-btn">&times;</button>
+    </div>
+    
+    <div id="chat-content" class="chatbot-content">
+        <div class="message bot-message">
+            Hello! I'm the Newspulse Contextual Guide. Ask me to explain a news term or for general information!
+        </div>
+    </div>
+
+    <div id="chat-input-area" class="chatbot-input-area">
+        <input type="text" id="chat-input" placeholder="Ask your question..." required>
+        <button id="chat-send-btn">Send</button>
+    </div>
+</div>
+   <script type=module src="{{ url_for('static', filename='script.js') }}" defer></script>
+   <!-- Make sure you include Chart.js -->
+
+
+
+</body>
+</html>
