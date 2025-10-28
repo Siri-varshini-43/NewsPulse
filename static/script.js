@@ -18,13 +18,13 @@ import {
 // =========================================================================
 // FIREBASE INITIALIZATION
 // =========================================================================
-const firebaseConfig = {
-  apiKey: "AIzaSyDmNpFNzy-FDL0fzEvNdAJkE_wc210F-rI",
-  authDomain: "login-form-c3bd2.firebaseapp.com",
-  projectId: "login-form-c3bd2",
-  storageBucket: "login-form-c3bd2.firebasestorage.app",
-  messagingSenderId: "866602088665",
-  appId: "1:866602088665:web:a5dfc6b522065235b7a6c8",
+const firebaseConfig = {    //Fill with your details
+  apiKey: "",
+  authDomain: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: "",
 };
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -313,4 +313,5 @@ new Chart(sourceCtx, {
 }
 
 // Load dashboard data once page is ready
+
 window.addEventListener('DOMContentLoaded', loadDashboardData);
